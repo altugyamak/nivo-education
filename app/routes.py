@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, render_template, request
+from flask import Blueprint, jsonify, render_template, request, current_app
 
 from app.database import lead_ekle, tum_leadler
 from app.services.ai_service import ai_service, AIServiceError
@@ -77,6 +77,15 @@ def yeni_lead():
 
 @api_bp.route("/leads", methods=["GET"])
 def leadleri_listele():
+    admin_password = request.headers.get("X-Admin-Password")
+    expected_password = current_app.config.get("ADMIN_PASSWORD")
+
+    if not expected_password or admin_password != expected_password:
+        return jsonify({
+            "basari": False,
+            "hata": "Yetkisiz erişim."
+        }), 401
+
     try:
         leadler = tum_leadler()
 

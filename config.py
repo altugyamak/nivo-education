@@ -8,8 +8,10 @@ class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
     DATABASE_URL = os.environ.get("DATABASE_URL", "nivo.db")
     GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
+    ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "")
     AI_PROVIDER = os.environ.get("AI_PROVIDER", "groq")
     CORS_ORIGINS = os.environ.get("CORS_ORIGINS", "*")
+    
 
     BUSINESS_CONTEXT = """
 You are NIVO AI, an education and career guidance assistant.
