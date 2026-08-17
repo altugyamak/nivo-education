@@ -1,6 +1,7 @@
 import re
 import requests
-from flask import current_app
+
+from config import Config
 
 
 class AIServiceError(Exception):
@@ -9,12 +10,12 @@ class AIServiceError(Exception):
 
 class AIService:
     def _get_system_prompt(self):
-        return current_app.config["BUSINESS_CONTEXT"]
+        return Config.BUSINESS_CONTEXT
 
     def yanit_uret(self, mesaj, gecmis=None):
         gecmis = gecmis or []
 
-        api_key = current_app.config.get("GROQ_API_KEY")
+        api_key = Config.GROQ_API_KEY
 
         if not api_key:
             return (
@@ -58,7 +59,7 @@ class AIService:
 
             cevap = data["choices"][0]["message"]["content"]
 
-            # Kullanıcıya görünmemesi gereken düşünme bölümünü temizler
+            # Kullanıcıya modelin iç düşünme bölümünü göstermemek için temizler.
             cevap = re.sub(
                 r"<think>.*?</think>",
                 "",
