@@ -51,24 +51,32 @@ def yeni_lead():
     data = request.get_json(silent=True) or {}
 
     isim = data.get("isim", "").strip()
+    email = data.get("email", "").strip()
     telefon = data.get("telefon", "").strip()
     mesaj = data.get("mesaj", "").strip()
 
-    if not isim or not telefon:
+    if not isim or not email or not telefon:
         return jsonify({
             "basari": False,
-            "hata": "İsim ve telefon alanları zorunludur."
+            "hata": "İsim, e-posta ve telefon alanları zorunludur."
         }), 400
 
     try:
-        lead_id = lead_ekle(isim, telefon, mesaj)
+        lead_id = lead_ekle(
+            isim,
+            email,
+            telefon,
+            mesaj
+        )
 
         return jsonify({
             "basari": True,
             "id": lead_id
         }), 201
 
-    except Exception:
+    except Exception as exc:
+        print("Lead kayıt hatası:", exc)
+
         return jsonify({
             "basari": False,
             "hata": "Kayıt sırasında bir hata oluştu."
